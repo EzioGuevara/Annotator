@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using DZ_ROISelector;
-using DZ_ROISelector.Models;
 
 namespace Annotator
 {
@@ -56,18 +55,13 @@ namespace Annotator
             _roiSelector.Size = picBox.Size;
             _roiSelector.Anchor = picBox.Anchor;
             _roiSelector.BackColor = Color.FromArgb(64, 64, 64);
+            _roiSelector.TabIndex = picBox.TabIndex;
             
             // 注册默认的 ROI 类型
-            _roiSelector.RegisterRoiType(new RoiType 
-            { 
-                TypeId = 0, 
-                TypeName = "Default", 
-                Color = Properties.Settings.Default.RectangleColor,
-                MaxCount = -1  // 无限制
-            });
+            _roiSelector.RegisterRoiType("Default", Properties.Settings.Default.RectangleColor, "默认标注");
             
             // 设置为配置模式
-            _roiSelector.SetMode(DZ_ROISelector.Enums.ControlMode.Configuration);
+            _roiSelector.Mode = DZ_ROISelector.Enums.ControlMode.Configuration;
             
             // 订阅事件
             _roiSelector.RoiCreated += RoiSelector_RoiCreated;
@@ -79,6 +73,9 @@ namespace Annotator
             this.Controls.Remove(picBox);
             this.Controls.Add(_roiSelector);
             _roiSelector.BringToFront();
+            
+            // 启动创建模式
+            _roiSelector.StartCreating("Default");
         }
 
         #endregion ROISelector Initialization
@@ -89,6 +86,9 @@ namespace Annotator
         {
             // ROI 创建时自动保存
             SaveImageRectangles(CurrenIndex);
+            
+            // 继续创建下一个
+            _roiSelector.StartCreating("Default");
         }
 
         private void RoiSelector_RoiModified(object sender, DZ_ROISelector.EventArgs.RoiModifiedEventArgs e)
@@ -227,7 +227,7 @@ namespace Annotator
                     List<BRectangle> rectangles = new List<BRectangle>();
                     foreach (var roi in roiList)
                     {
-                        // ROI 已经是原始图像坐标，直接使用
+                        // 使用原始图像坐标,转换为 int
                         rectangles.Add(new BRectangle(
                             (int)roi.OriginalRect.X,
                             (int)roi.OriginalRect.Y,
@@ -252,20 +252,19 @@ namespace Annotator
                     var rectangles = _annList.CheckoutRectangles(file, 0, 0, 1.0f);
                     
                     // 清除现有 ROI
-                    _roiSelector.ClearAllRois();
+                    _roiSelector.ClearRois();
                     
                     // 添加到 ROISelector（使用原始图像坐标）
                     if (rectangles != null)
                     {
                         foreach (var rect in rectangles)
                         {
-                            _roiSelector.AddRoi(new RoiData
-                            {
-                                TypeId = 0,  // 默认类型
-                                OriginalRect = new RectangleF(rect.X, rect.Y, rect.Width, rect.Height)
-                            });
+                            _roiSelector.AddRoi("Default", new Rectangle(rect.X, rect.Y, rect.Width, rect.Height));
                         }
                     }
+                    
+                    // 重新启动创建模式
+                    _roiSelector.StartCreating("Default");
                 }
             }
         }
@@ -278,7 +277,7 @@ namespace Annotator
                 if (System.IO.File.Exists(fullPath))
                 {
                     Image loadedImage = Image.FromFile(fullPath);
-                    _roiSelector.SetImage(loadedImage);
+                    _roiSelector.SourceImage = loadedImage;
                 }
             }
         }
@@ -374,12 +373,8 @@ namespace Annotator
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            // Delete 键删除选中的 ROI
-            if (e.KeyCode == Keys.Delete)
-            {
-                _roiSelector.DeleteSelectedRoi();
-                e.Handled = true;
-            }
+            // Delete 键由 ROISelector 内部处理
+            // 这里可以添加其他快捷键
         }
 
         #endregion Form Events

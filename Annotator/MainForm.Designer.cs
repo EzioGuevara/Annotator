@@ -208,11 +208,6 @@
             this.picBox.Size = new System.Drawing.Size(711, 479);
             this.picBox.TabIndex = 8;
             this.picBox.TabStop = false;
-            this.picBox.Paint += new System.Windows.Forms.PaintEventHandler(this.picBox_Paint);
-            this.picBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picBox_MouseDown);
-            this.picBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picBox_MouseMove);
-            this.picBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picBox_MouseUp);
-            this.picBox.Resize += new System.EventHandler(this.picBox_Resize);
             // 
             // MainForm
             // 
@@ -268,4 +263,3 @@
         private System.Windows.Forms.ToolStripButton tsOptions;
     }
 }
-
