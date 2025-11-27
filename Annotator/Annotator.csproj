@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Annotator</RootNamespace>
     <AssemblyName>Annotator</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -124,6 +125,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\example.JPG" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DZ_ROISelector\DZ_ROISelector.csproj">
+      <Project>{a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d}</Project>
+      <Name>DZ_ROISelector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
