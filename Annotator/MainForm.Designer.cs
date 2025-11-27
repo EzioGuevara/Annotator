@@ -45,9 +45,15 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsTestCrop = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsOptions = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblImageInfo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblRoiCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.picBox = new System.Windows.Forms.PictureBox();
             this.toolStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -139,6 +145,8 @@
             this.toolStripSeparator2,
             this.tsExport,
             this.toolStripSeparator3,
+            this.tsTestCrop,
+            this.toolStripSeparator4,
             this.tsOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -188,6 +196,20 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // tsTestCrop
+            // 
+            this.tsTestCrop.Image = global::Annotator.Properties.Resources.FileSystemEditor_16x;
+            this.tsTestCrop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsTestCrop.Name = "tsTestCrop";
+            this.tsTestCrop.Size = new System.Drawing.Size(85, 22);
+            this.tsTestCrop.Text = "&Test Crop";
+            this.tsTestCrop.Click += new System.EventHandler(this.tsTestCrop_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
             // tsOptions
             // 
             this.tsOptions.Image = global::Annotator.Properties.Resources.Settings_Inverse_16x;
@@ -196,6 +218,29 @@
             this.tsOptions.Size = new System.Drawing.Size(78, 22);
             this.tsOptions.Text = "&Options...";
             this.tsOptions.Click += new System.EventHandler(this.tsOptions_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblImageInfo,
+            this.lblRoiCount});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 578);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(900, 22);
+            this.statusStrip1.TabIndex = 12;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lblImageInfo
+            // 
+            this.lblImageInfo.Name = "lblImageInfo";
+            this.lblImageInfo.Size = new System.Drawing.Size(0, 17);
+            // 
+            // lblRoiCount
+            // 
+            this.lblRoiCount.Name = "lblRoiCount";
+            this.lblRoiCount.Size = new System.Drawing.Size(885, 17);
+            this.lblRoiCount.Spring = true;
+            this.lblRoiCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // picBox
             // 
@@ -213,6 +258,7 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(900, 600);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.lblMouseY);
             this.Controls.Add(this.lblMouseX);
@@ -234,6 +280,8 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -261,5 +309,10 @@
         private System.Windows.Forms.ToolStripButton tsExport;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tsOptions;
+        private System.Windows.Forms.ToolStripButton tsTestCrop;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel lblImageInfo;
+        private System.Windows.Forms.ToolStripStatusLabel lblRoiCount;
     }
 }

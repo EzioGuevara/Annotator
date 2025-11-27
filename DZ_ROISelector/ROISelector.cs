@@ -127,12 +127,13 @@ namespace DZ_ROISelector
 
         public ROISelector()
         {
-            InitializeComponent();
-
+            // 先初始化关键字段，避免 InitializeComponent 调用期间访问尚未初始化的依赖项（例如 OnResize -> UpdateTransform -> SourceImage）
             _roiTypes = new Dictionary<string, RoiType>();
             _rectangles = new List<RoiRectangle>();
             _transform = new CoordinateTransform();
             _imageCache = new ImageCache();
+
+            InitializeComponent();
 
             Mode = ControlMode.Configuration;
             ShowLabels = true;

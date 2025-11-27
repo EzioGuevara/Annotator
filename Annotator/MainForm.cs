@@ -87,6 +87,9 @@ namespace Annotator
             // ROI 创建时自动保存
             SaveImageRectangles(CurrenIndex);
             
+            // 更新状态栏
+            UpdateStatusBar();
+            
             // 继续创建下一个
             _roiSelector.StartCreating("Default");
         }
@@ -95,12 +98,18 @@ namespace Annotator
         {
             // ROI 修改时自动保存
             SaveImageRectangles(CurrenIndex);
+            
+            // 更新状态栏
+            UpdateStatusBar();
         }
 
         private void RoiSelector_RoiDeleted(object sender, DZ_ROISelector.EventArgs.RoiDeletedEventArgs e)
         {
             // ROI 删除时自动保存
             SaveImageRectangles(CurrenIndex);
+            
+            // 更新状态栏
+            UpdateStatusBar();
         }
 
         private void RoiSelector_RoiSelected(object sender, DZ_ROISelector.EventArgs.RoiSelectedEventArgs e)
@@ -259,7 +268,7 @@ namespace Annotator
                     {
                         foreach (var rect in rectangles)
                         {
-                            _roiSelector.AddRoi("Default", new Rectangle(rect.X, rect.Y, rect.Width, rect.Height));
+                            _roiSelector.AddRoi("Default", new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height));
                         }
                     }
                     
@@ -278,7 +287,35 @@ namespace Annotator
                 {
                     Image loadedImage = Image.FromFile(fullPath);
                     _roiSelector.SourceImage = loadedImage;
+                    
+                    // 更新状态栏
+                    UpdateStatusBar();
                 }
+            }
+        }
+
+        /// <summary>
+        /// 更新状态栏信息
+        /// </summary>
+        private void UpdateStatusBar()
+        {
+            if (_files != null && _files.Count > 0 && CurrenIndex >= 0 && CurrenIndex < _files.Count)
+            {
+                lblImageInfo.Text = $"图片: {_files[CurrenIndex]} ({CurrenIndex + 1}/{_files.Count})";
+            }
+            else
+            {
+                lblImageInfo.Text = "";
+            }
+            
+            if (_roiSelector != null)
+            {
+                int roiCount = _roiSelector.GetAllRois().Count;
+                lblRoiCount.Text = $"ROI 数量: {roiCount}";
+            }
+            else
+            {
+                lblRoiCount.Text = "";
             }
         }
 
@@ -375,6 +412,56 @@ namespace Annotator
         {
             // Delete 键由 ROISelector 内部处理
             // 这里可以添加其他快捷键
+        }
+
+        private void tsTestCrop_Click(object sender, EventArgs e)
+        {
+            if (_roiSelector == null)
+            {
+                MessageBox.Show("ROI 选择器未初始化", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var allRois = _roiSelector.GetAllRois();
+            
+            if (allRois.Count == 0)
+            {
+                MessageBox.Show("当前没有 ROI，请先创建矩形框", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 获取所有 ROI 裁剪图像
+            List<Bitmap> images = new List<Bitmap>();
+            for (int i = 0; i < allRois.Count; i++)
+            {
+                Bitmap croppedImage = _roiSelector.GetRoiImage(i);
+                if (croppedImage != null)
+                {
+                    images.Add(croppedImage);
+                }
+            }
+
+            if (images.Count > 0)
+            {
+                // 显示预览窗口
+                string imageName = _files != null && CurrenIndex >= 0 && CurrenIndex < _files.Count 
+                    ? _files[CurrenIndex] 
+                    : "未知图片";
+                    
+                RoiPreviewForm preview = new RoiPreviewForm();
+                preview.ShowRoiImages(images, imageName);
+                preview.ShowDialog(this);
+                
+                // 释放图像资源
+                foreach (var img in images)
+                {
+                    img.Dispose();
+                }
+            }
+            else
+            {
+                MessageBox.Show("无法获取 ROI 图像", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion Form Events
